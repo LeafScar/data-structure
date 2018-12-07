@@ -22,14 +22,24 @@ public:
 	// 只读访问接口
 	Rank size() const { return _size; } // 规模
 	bool empty() const { return !_size; } // 判空
+
+	Rank find(T const& e) const { return find(e, 0, _size); } // 无序向量整体查找
+	Rank find(T const& e, Rank lo, Rank hi) const;
+	
 	// 可写访问接口
+	T& operator[] (Rank r) const; // 重载下标操作符，可以类似于数组形式引用各元素
+	vector<T>& operator= (vector<T> const&); // 重载赋值操作符，以便直接克隆向量
 	T remove(Rank r); // 删除秩为r的元素
 	int remove(Rank lo, Rank hi); // 删除秩在区间[lo, hi)之内的元素
 	Rank insert(Rank r, T const& e);
 	Rank insert(T const& e) { return insert(_size, e); } // 默认作为末元素插入
 
+	int deduplicate(); //无序去重
 
 
+	// 遍历
+	void traverse(void(*)(T&)); // 遍历(使用函数指针，只读或局部性修改)
+	template <typename VST> void traverse(VST&); // 遍历(使用函数对象，可全局性修改)
 };
 
 #include "vector_implementation.h"
